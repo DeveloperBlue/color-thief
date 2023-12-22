@@ -3,6 +3,48 @@
 
 Grab the color palette from an image using just Javascript.Works in the browser and in Node.
 
+## Fork Contents
+
+This is a fork of [@lokesh/color-theif](https://github.com/lokesh/color-thief).
+
+This fork adds the following features:
+- Option to include white in the possible color palette
+- Option to check if an image contains transparency (with fine-tunable thresholds)
+
+> WARNING:
+Only the **node version** (color-thief-node.js) is modified with these changes. That being said, porting these changes to color-theif.js is trivial; feel free to make a pull request.
+The demo and tests are also not altered to reflect these changes.
+
+### Usage with includeWhite and hasTransparency
+
+```js
+// Modified Function Parameters
+
+// To include white when creating the color palette, simply set pass true to the includeWhite parameter.
+getColor(img, quality, includeWhite = false)
+
+// To check if an image has transparency, pass true to the hasTransparency parameter.
+getPalette(img, colorCount = 10, quality = 10, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 10, imageConsideredTransparentThreshold : 0.1}) {
+```
+
+
+**⚠️ Note that getPalette() will then return an OBJECT when checkTransparency is true**⚠️.
+
+```js
+// original
+const palette = getPalette(img, colorCount, quality, includeWhite, checkTransparency = false)
+// with checkTransparency
+const {palette, hasTransparency} = getPalette(img, colorCount, quality, includeWhite, checkTransparency = true)
+```
+
+To fine-tune how ``getPalette()`` determines if an image has transparency, you can also pass an additional checkTransparencyConfig object, where:
+
+``pixelConsideredTransparentThreshold`` should be between 0 and 255. Default is 10, meaning if a pixel's alpha (0-255) is less than this 10, the pixel is counted towards the overall transparency check.
+
+``pixelConsideredTransparentThreshold`` should be between 0 and 1. Default is 0.1, meaning if 10% of the pixels trigger the pixelConsideredTransparentThreshold check, the image is considered transparent.
+
+---
+
 ### View the [demo page](https://lokeshdhakar.com/projects/color-thief/) for examples, API docs, and more.
 
 ---
