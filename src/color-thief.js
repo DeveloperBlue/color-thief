@@ -55,8 +55,8 @@ var ColorThief = function () {};
  * most dominant color.
  *
  * */
-ColorThief.prototype.getColor = function(sourceImage, quality = 10) {
-    const palette       = this.getPalette(sourceImage, 5, quality);
+ColorThief.prototype.getColor = function(sourceImage, quality = 10, includeWhite = false) {
+    const palette       = this.getPalette(sourceImage, 5, quality, includeWhite);
     const dominantColor = palette[0];
     return dominantColor;
 };
@@ -77,10 +77,13 @@ ColorThief.prototype.getColor = function(sourceImage, quality = 10) {
  *
  *
  */
-ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality) {
+ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 10, imageConsideredTransparentThreshold : 0.1}) {
     const options = core.validateOptions({
         colorCount,
-        quality
+        quality,
+        includeWhite,
+        checkTransparency,
+        checkTransparencyConfig
     });
 
     // Create custom CanvasImage object
@@ -88,13 +91,18 @@ ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality) {
     const imageData  = image.getImageData();
     const pixelCount = image.width * image.height;
 
-    const pixelArray = core.createPixelArray(imageData.data, pixelCount, options.quality);
+    const {pixelArray, hasTransparency} = core.createPixelArray(imageData.data, pixelCount, options);
+
 
     // Send array to quantize function which clusters values
     // using median cut algorithm
     const cmap    = quantize(pixelArray, options.colorCount);
     const palette = cmap? cmap.palette() : null;
 
+    if (checkTransparency) {
+        return {palette, hasTransparency};
+    }
+    
     return palette;
 };
 
