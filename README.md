@@ -11,9 +11,8 @@ This fork adds the following features:
 - Option to include white in the possible color palette
 - Option to check if an image contains transparency (with fine-tunable thresholds)
 
-> WARNING:
-Only the **node version** (color-thief-node.js) is modified with these changes. That being said, porting these changes to color-theif.js is trivial; feel free to make a pull request.
-The demo and tests are also not altered to reflect these changes.
+> NOTE:
+The demo and tests are not altered to reflect these changes.
 
 ### Usage with includeWhite and hasTransparency
 
