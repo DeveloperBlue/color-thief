@@ -1,12 +1,19 @@
 {
     "name": "colorthief",
-    "version": "2.4.0",
+    "version": "2.5",
     "author": {
         "name": "Lokesh Dhakar",
         "email": "lokesh.dhakar@gmail.com",
         "url": "http://lokeshdhakar.com/"
     },
-    "description": "Get the dominant color or color palette from an image.",
+    "contributors" : [
+        {
+          "name" : "Michael Rooplall",
+          "email" : "michaelrooplall@gmail.com",
+          "url" : "https://michaelrooplall.com"
+        }
+    ],
+    "description": "Get the dominant color or color palette from an image. Forked to include whites and check for transparency.",
     "keywords": [
         "color",
         "palette",
@@ -14,12 +21,14 @@
         "image",
         "picture",
         "photo",
-        "canvas"
+        "canvas",
+        "white",
+        "transparency"
     ],
     "homepage": "http://lokeshdhakar.com/projects/color-thief/",
     "repository": {
         "type": "git",
-        "url": "https://github.com/lokesh/color-thief.git"
+        "url": "https://github.com/DeveloperBlue/color-thief"
     },
     "license": "MIT",
     "source": "src/color-thief.js",
