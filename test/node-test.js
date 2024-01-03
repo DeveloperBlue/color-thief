@@ -1,6 +1,6 @@
 const { resolve } = require('path');
 const ColorThief = require(resolve(process.cwd(), "dist/color-thief.js"));
-const img = resolve(process.cwd(), 'cypress/test-pages/img/rainbow-vertical.png');
+const img = resolve(process.cwd(), 'cypress/test-pages/img/rainbow-black-white-transparent-vertical.png');
 const chai = require("chai");
 const expect = chai.expect;
 chai.use(require("chai-as-promised"));
@@ -20,5 +20,11 @@ describe('getPalette()', function() {
     it('returns 9 colors when colorCount set to 9', function() {
         return expect(ColorThief.getPalette(img, 9)).to.eventually.have.lengthOf(9);
     });
+
+    it('returns {palette, hasTransparency = true} when checkTransparency is set to true', function() {
+        return expect(ColorThief.getPalette(img, 10, 10, false, true)).to.eventually.satisfy(({palette, hasTransparency}) => {
+            return (hasTransparency == true)
+        })
+    })
 });
 

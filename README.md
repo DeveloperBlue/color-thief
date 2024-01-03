@@ -23,7 +23,7 @@ The demo and tests are not altered to reflect these changes.
 getColor(img, quality, includeWhite = false)
 
 // To check if an image has transparency, pass true to the hasTransparency parameter.
-getPalette(img, colorCount = 10, quality = 10, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 10, imageConsideredTransparentThreshold : 0.1}) {
+getPalette(img, colorCount = 10, quality = 10, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 125, imageConsideredTransparentThreshold : 0.1}) {
 ```
 
 
@@ -38,9 +38,9 @@ const {palette, hasTransparency} = getPalette(img, colorCount, quality, includeW
 
 To fine-tune how ``getPalette()`` determines if an image has transparency, you can also pass an additional checkTransparencyConfig object, where:
 
-``pixelConsideredTransparentThreshold`` should be between 0 and 255. Default is 10, meaning if a pixel's alpha (0-255) is less than this 10, the pixel is counted towards the overall transparency check.
+``pixelConsideredTransparentThreshold`` should be between 0 and 255. Default is 125, meaning if a pixel's alpha (0-255) is less than this 10, the pixel is counted towards the overall transparency check.
 
-``pixelConsideredTransparentThreshold`` should be between 0 and 1. Default is 0.1, meaning if 10% of the pixels trigger the pixelConsideredTransparentThreshold check, the image is considered transparent.
+``pixelConsideredTransparentThreshold`` should be between 0 and 1. Default is 0. If set to 0, any transparent pixel detected will mean the image is considered to be transparent. Any number greater than 0 serves as a treshold. For example, when set to 0.1 (a target of 10%); if 10% of all the pixels trigger the pixelConsideredTransparentThreshold check, the image is considered transparent.
 
 ---
 
