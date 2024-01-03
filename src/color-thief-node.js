@@ -18,7 +18,7 @@ function createPixelArray(imgData, pixelCount, options) {
         a = pixels[offset + 3];
 
         // If pixel is mostly opaque and not white
-        if (typeof a === 'undefined' || a >= 125 ) {
+        if (typeof a === 'undefined' || a >= checkTransparencyConfig.pixelConsideredTransparentThreshold ) {
             if (!(r > 250 && g > 250 && b > 250) || includeWhite) {
                 pixelArray.push([r, g, b]);
             }
@@ -27,7 +27,7 @@ function createPixelArray(imgData, pixelCount, options) {
         }
     }
 
-    const hasTransparency = checkTransparency && ((transparentPixels / pixelCount.length) > checkTransparencyConfig.imageConsideredTransparentThreshold);
+    const hasTransparency = checkTransparency && ((transparentPixels / (pixelCount/quality)) > checkTransparencyConfig.imageConsideredTransparentThreshold);
 
     return {pixelArray, hasTransparency}
 
@@ -58,26 +58,26 @@ function validateOptions(options) {
     } else {
         if (typeof checkTransparencyConfig == 'undefined' || typeof checkTransparencyConfig !== 'object') {
             checkTransparencyConfig = {
-                pixelConsideredTransparentThreshold : 10,
-                imageConsideredTransparentThreshold : 0.1
+                pixelConsideredTransparentThreshold : 125,
+                imageConsideredTransparentThreshold : 0
             }
         } else {
             const {pixelConsideredTransparentThreshold, imageConsideredTransparentThreshold} = checkTransparencyConfig;
 
             if (typeof pixelConsideredTransparentThreshold == 'undefined' || Number.isNaN(pixelConsideredTransparentThreshold)) {
-                checkTransparencyConfig.pixelConsideredTransparentThreshold = 10;
+                checkTransparencyConfig.pixelConsideredTransparentThreshold = 125;
             }
 
             if (pixelConsideredTransparentThreshold < 0 || pixelConsideredTransparentThreshold > 255) {
-                throw new Error('pixelConsideredTransparentThreshold should be between 0 and 255. Default is 10, meaning if a pixel\'s alpha (0-255) is less than this 10, the pixel is counted towards the overall transparency check.');
+                throw new Error('pixelConsideredTransparentThreshold should be between 0 and 255. Default is 125, meaning if a pixel\'s alpha (0-255) is less than this 125, the pixel is counted towards the overall transparency check.');
             }
 
             if (typeof imageConsideredTransparentThreshold == 'undefined' || Number.isNaN(imageConsideredTransparentThreshold)) {
-                checkTransparencyConfig.imageConsideredTransparentThreshold = 0.1;
+                checkTransparencyConfig.imageConsideredTransparentThreshold = 0;
             }
 
             if (imageConsideredTransparentThreshold < 0 || imageConsideredTransparentThreshold > 1) {
-                throw new Error('pixelConsideredTransparentThreshold should be between 0 and 1. Default is 0.1, meaning if 10% of the pixels trigger the pixelConsideredTransparentThreshold check, the image is considered transparent.');
+                throw new Error('pixelConsideredTransparentThreshold should be between 0 and 1. Default is 0. If set to 0, any transparent pixel detected will mean the image is considered to be transparent. Any number greater than 0 serves as a treshold. For example, when set to 0.1 (a target of 10%); if 10% of all the pixels trigger the pixelConsideredTransparentThreshold check, the image is considered transparent.');
             }
 
         }
@@ -117,7 +117,7 @@ function getColor(img, quality, includeWhite = false) {
 
 }
 
-function getPalette(img, colorCount = 10, quality = 10, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 10, imageConsideredTransparentThreshold : 0.1}) {
+function getPalette(img, colorCount = 10, quality = 10, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 125, imageConsideredTransparentThreshold : 0}) {
     const options = validateOptions({
         colorCount,
         quality,

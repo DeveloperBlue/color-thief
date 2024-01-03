@@ -77,7 +77,7 @@ ColorThief.prototype.getColor = function(sourceImage, quality = 10, includeWhite
  *
  *
  */
-ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 10, imageConsideredTransparentThreshold : 0.1}) {
+ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality, includeWhite = false, checkTransparency = false, checkTransparencyConfig = {pixelConsideredTransparentThreshold : 125, imageConsideredTransparentThreshold : 0}) {
     const options = core.validateOptions({
         colorCount,
         quality,
